@@ -1,0 +1,75 @@
+.section__title{
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.section__top h2{
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+}
+
+.contact{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    max-width: 80%;
+    margin-left: 20%;
+    margin-right: 30%;
+    margin-top: 5%;
+    
+}
+
+.contact__top{
+    line-height: 30px;
+    margin-top: 0;
+    color: #676767;
+}
+
+ul{
+    color: #676767;
+    
+}
+
+.section__details li{
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+
+.section__msg{
+    color: black;
+}
+
+
+.contact__top form input, .contact__top form textarea {
+    display: block;
+    width: 200%;
+    background: #ebecfe;
+    padding: 15px;
+    border: 0;
+    outline: 0;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    resize: none;
+}
+
+.contact__top span{
+    display: block;
+    margin: 20px 0;
+}
+
+.message-btn{
+    margin: 15px;
+    padding: 10px;
+    background-color: #3d2676;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 50%;
+}
+
+.message-btn:hover{
+    background-color: #6464d7;
+}
+
