@@ -74,6 +74,7 @@ const Quiz = () => {
     }
 
     return (
+        <section id='quiz'>
         <div className='quiz' >
             <h1 className="section__title" >ActiveKids
                 <span className="highlights"> Quiz</span>
@@ -105,6 +106,7 @@ const Quiz = () => {
                 </>
             )}
         </div>
+        </section>
     );
 };
 

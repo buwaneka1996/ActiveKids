@@ -8,6 +8,7 @@ const nav__links = [
   { path: '#home', display: 'Home' },
   { path: '#exercises', display: 'Exercises' },
   { path: '#bmi', display: 'BMI' },
+  { path: '#quiz', display: 'Quiz'},
   { path: '#contact', display: 'Contact Us' },
 ];
 

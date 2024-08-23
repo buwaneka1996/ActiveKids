@@ -20,7 +20,7 @@ const Footer = () => {
                     <h4 className="footer__title">For Kids</h4>
                     <ul className="footer__links">
                         <li><a href="#">About Us</a></li>
-                        <li><a href="#">Register</a></li>
+                
                     </ul>
                 </div>
 
@@ -30,7 +30,7 @@ const Footer = () => {
                         <li><a href="#home">Home</a></li>
                         <li><a href="#exercises">Exercises</a></li>
                         <li><a href="#bmi">Check BMI</a></li>
-                        
+                        <li><a href='#quiz'>Quiz</a></li>
                     </ul>
                 </div>
 
