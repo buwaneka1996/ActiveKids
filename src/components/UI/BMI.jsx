@@ -1,27 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Dumbbell } from "lucide-react";
 import Label from '../../components/Label/Label';
 import Input from '../../components/Input/Input';
-import { Button } from '@mui/material';
+//import { Button } from '@mui/material';
 import '../../styles/bmi.css';
 
-const BMI = () => {
-    
- //logic to write bmi 
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
+const BMI = ({ userHeight, userWeight }) => {
+  const [weight, setWeight] = useState(userWeight || '');
+  const [height, setHeight] = useState(userHeight || '');
   const [bmi, setBmi] = useState(null);
 
-  //function to calculate bmi
-  const calculateBMI = () => {
-    const bmi = (weight / ((height * height) / 10000)).toFixed(2);
-    setBmi(bmi);
+  useEffect(() => {
+    if (userHeight && userWeight) {
+      setHeight(userHeight);
+      setWeight(userWeight);
+    }
+  }, [userHeight, userWeight]);
+
+  const calculateBMI = (height, weight) => {
+    if (height > 0 && weight > 0) {
+      const bmi = (weight / ((height * height) / 10000)).toFixed(2);
+      setBmi(bmi);
+    } else {
+      setBmi(null);
+    }
   };
-  
+
+  useEffect(() => {
+    if (height && weight) {
+      calculateBMI(height, weight);
+    }
+  }, [height, weight]);
+
   return (
-    <section id='bmi'
-    data-aos='zoom-in'
-                    data-duration='1500'>
+    <section id='bmi' data-aos='zoom-in' data-duration='1500'>
       <div className='bmi-container'>
         <div className='bmi-content'>
           <h2 className='bmi-header'>
@@ -38,7 +50,10 @@ const BMI = () => {
                 type='number'
                 placeholder='Enter your weight'
                 value={weight}
-                onChange={(e) => setWeight(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setWeight(value);
+                }}
               />
             </div>
 
@@ -50,14 +65,19 @@ const BMI = () => {
                 type='number'
                 placeholder='Enter your height'
                 value={height}
-                onChange={(e) => setHeight(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setHeight(value);
+                }}
               />
             </div>
 
-            <div className='bmi-button-group'>
-              <Button variant='contained' onClick={calculateBMI}>Calculate BMI</Button>
-            </div>
+           {/* <div className='bmi-button-group'>
+              <Button variant='contained' onClick={() => calculateBMI(height, weight)}>Calculate BMI</Button>
+            </div> */}
           </div>
+    
+          
 
           {bmi !== null && (
             <div className='bmi-result'>
@@ -69,4 +89,5 @@ const BMI = () => {
     </section>
   );
 };
-export default BMI
+
+export default BMI;

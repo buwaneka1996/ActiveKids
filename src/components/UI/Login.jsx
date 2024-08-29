@@ -9,6 +9,7 @@ export const Login = ({ onLogin, onClose }) => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -21,34 +22,39 @@ export const Login = ({ onLogin, onClose }) => {
       const response = await axios.post('http://localhost:5001/login', { email, password });
       alert('Logged in successfully.');
       console.log(response.data);
-      onLogin({ username: response.data.username, email }); // Inform the parent component
-      onClose(); // Close the login form
+      onLogin({ username: response.data.username, email, 
+        height: response.data.height,
+        weight: response.data.weight
+      });
+      onClose(); 
       setLoggedIn(true);
     } catch (error) {
       alert('Login failed: ' + error.response.data);
     }
   };
 
-  const registerHandle = async (username, age, weight, email, password) => {
+  const registerHandle = async (username, height, weight, email, password) => {
     try {
-      const response = await axios.post('http://localhost:5001/register', { username, age, weight, email, password });
+      const response = await axios.post('http://localhost:5001/register', { username, height, weight, email, password });
       alert('Registered Successfully.');
       console.log(response.data);
-      onClose(); // Close the registration form
+      setHeight(height);
+      setWeight(weight);
+      onClose(); 
     } catch (error) {
       alert("Registration failed: " + error.response.data);
     }
   };
 
   const handleRegisterLinkClick = () => {
-    setShowRegisterForm(true); // Display register form
+    setShowRegisterForm(true); 
   };
 
   const handleLoginLinkClick = () => {
-    setShowRegisterForm(false); // Display login form
+    setShowRegisterForm(false); 
   };
   const handleLogout = () => {
-    setLoggedIn(false); // Set loggedIn state to false to display login form
+    setLoggedIn(false); 
   };
 
   return (
@@ -58,7 +64,7 @@ export const Login = ({ onLogin, onClose }) => {
 
       <div className='form-container'>
       {loggedIn ? (
-          // If logged in, show personalized welcome message
+          
           <div className='logged-in-box'>
             <h2>Welcome, {name}!</h2>
             {<button onClick={handleLogout} className='btn'>Logout</button>}
@@ -106,7 +112,7 @@ export const Login = ({ onLogin, onClose }) => {
             <h2>Register</h2>
             <form onSubmit={(e) => {
               e.preventDefault();
-              registerHandle(name, age, weight, email, password);
+              registerHandle(name, height, weight, email, password);
             }}>
 
               <div className="input__box">
@@ -118,8 +124,8 @@ export const Login = ({ onLogin, onClose }) => {
 
               <div className="input__box">
                 <span className="icon"><i className="ri-calendar-fill"></i>
-                  <input type="text" required onChange={(e) => setAge(e.target.value)} />
-                  <label>Age</label>
+                  <input type="text" required onChange={(e) => setHeight(e.target.value)} />
+                  <label>Height</label>
                 </span>
               </div>
 

@@ -42,7 +42,7 @@ function App() {
       <Hero />
       <Exercises />
       <Start />
-      <BMI />
+      <BMI userHeight={user?.height} userWeight={user?.weight}/>
       <ExercisesItems />
       <Quiz />
       {isLoggedIn && <Profile user={user} />}

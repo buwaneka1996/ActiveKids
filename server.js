@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
+  height: Number,
+  weight: Number,
   achievements: [String],
   workouts: {    
     pushups: { type: Number, default: 0 },
@@ -38,8 +40,8 @@ const User = mongoose.model("User", userSchema);
 // Registration endpoint
 app.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
+    const { username, email, password, height, weight } = req.body;
+    if (!username || !email || !password || !height || !weight) {
       return res.status(400).json({ error: "All fields are required." });
     }
 
@@ -48,7 +50,7 @@ app.post("/register", async (req, res) => {
       return res.status(400).json({ error: "User already exists." });
     }
 
-    const newUser = new User({ username, email, password, achievements: [], workouts: { pushups: 0 } });
+    const newUser = new User({ username, email, password, height, weight, achievements: [], workouts: { pushups: 0 } });
     await newUser.save();
     console.log("User registered:", newUser);
     res.status(201).json(newUser);
@@ -64,7 +66,7 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email, password });
     if (user) {
-      res.status(200).json({ message: "Login successful", username: user.username }); // send username
+      res.status(200).json({ message: "Login successful", username: user.username, height: user.height, weight: user.weight }); 
     } else {
       res.status(401).send("Invalid email or password");
     }
