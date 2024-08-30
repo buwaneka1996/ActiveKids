@@ -1,5 +1,5 @@
 
-
+/*
 const Wrapper = () => {
 const loginWrapper = document.querySelector('login__wrapper');
 const loginLink = document.querySelector('login__link');
@@ -27,4 +27,4 @@ return null;
 };
 
 
-export default Wrapper;
+export default Wrapper;*/

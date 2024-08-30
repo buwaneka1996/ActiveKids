@@ -27,5 +27,3 @@ const Start = () => {
 }
 
 export default Start
-
-//<button className='register__btn'>Get Started</button>

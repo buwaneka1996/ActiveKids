@@ -5,7 +5,6 @@ import '../../styles/profile.css';
 
 const Profile = ({ user }) =>{
     
-    //placeholder user objcet
     
 
     return (

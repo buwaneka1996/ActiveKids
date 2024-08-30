@@ -131,8 +131,7 @@ const PushupExercise = ({ onClose }) => {
                 if (webcamRef.current && webcamRef.current.video.readyState === 4) {
                     const video = webcamRef.current.video;
                     const pose = await detector.estimatePoses(video);
-
-                    // Push-up detection 
+ 
                     detectPushup(pose[0]);
 
                     // Drawing keypoints and skeleton on canvas

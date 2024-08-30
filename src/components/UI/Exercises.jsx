@@ -12,7 +12,7 @@ const Exercises = () => {
                     <span className="highlights"> Exercise</span>
 
                 </h2>
-                <p>Exercise gives you a wide range of healthy benefits and reduce upcoming healthy issues.</p>
+                <p>Exercise gives you a wide range of healthy benefits and reduce upcoming health issues.</p>
             </div>
 
             <div className="exercise__wrapper">

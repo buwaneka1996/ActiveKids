@@ -31,11 +31,8 @@ const Workout = ({ email }) => {
       setAchievement(response.data.achievement);
     } catch (error) {
       console.error("Error completing workout:", error);
-  
-      // Log the entire error object to understand the structure
       console.log("Error object:", error);
   
-      // Check if the error has a response with data
       if (error.response && error.response.data) {
         const serverError = error.response.data.error || "Unknown error";
         const serverDetails = error.response.data.details || "No additional details provided.";
