@@ -123,20 +123,6 @@ export const Login = ({ onLogin, onClose }) => {
               </div>
 
               <div className="input__box">
-                <span className="icon"><i className="ri-calendar-fill"></i>
-                  <input type="text" required onChange={(e) => setHeight(e.target.value)} />
-                  <label>Height</label>
-                </span>
-              </div>
-
-              <div className="input__box">
-                <span className="icon"><i className="ri-user-heart-fill"></i>
-                  <input type="text" required onChange={(e) => setWeight(e.target.value)} />
-                  <label>Weight</label>
-                </span>
-              </div>
-
-              <div className="input__box">
                 <span className="icon"><i className="ri-mail-fill"></i>
                   <input type="email" required onChange={(e) => setEmail(e.target.value)} />
                   <label>Email</label>
@@ -149,6 +135,22 @@ export const Login = ({ onLogin, onClose }) => {
                   <label>Password</label>
                 </span>
               </div>
+
+              <div className="input__box">
+                <span className="icon"><i className="ri-arrow-up-double-fill"></i>
+                  <input type="text" required onChange={(e) => setHeight(e.target.value)} />
+                  <label>Height</label>
+                </span>
+              </div>
+
+              <div className="input__box">
+                <span className="icon"><i className="ri-weight-fill"></i>
+                  <input type="text" required onChange={(e) => setWeight(e.target.value)} />
+                  <label>Weight</label>
+                </span>
+              </div>
+
+              
 
               <div className="remember__forgot">
                 <label><input type="checkbox" required />I agree to the terms & conditions</label>

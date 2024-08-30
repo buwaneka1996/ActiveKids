@@ -58,6 +58,26 @@
     line-height: 28px;
 }
 
+.guidelines{
+  
+  line-height: 28px;
+  margin-top: 30px;
+  margin-bottom: 80px;
+}
+
+.guidelines ul li{
+  display: flex;
+  align-items: center;
+  color: black;
+}
+
+.guidelines ul li span i{
+  margin-right: 1rem;
+  color: #230868;
+}
+
+
+
 .exitems__item .values ul li span i{
     font-size: 0.9rem;
     color: #503cd0;
