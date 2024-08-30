@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// Registration endpoint
+// Registration 
 app.post("/register", async (req, res) => {
   try {
     const { username, email, password, height, weight } = req.body;
@@ -60,7 +60,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Login endpoint
+// Login 
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -119,7 +119,6 @@ app.post("/completeWorkout", async (req, res) => {
   try {
     console.log("Received request:", { email, pushupCount, squatCount });
 
-    // Check for missing or invalid values
     if (!email || typeof pushupCount !== "number" || isNaN(pushupCount) || typeof squatCount !== "number" || isNaN(squatCount)) {
       return res.status(400).json({
         error: "Invalid input",
@@ -141,7 +140,6 @@ app.post("/completeWorkout", async (req, res) => {
     const pushupMilestones = [10, 15, 20, 25, 30];
     const squatMilestones = [10, 15, 20, 25, 30];
     
-    // Check for achievements based on pushup milestones
     pushupMilestones.forEach(milestone => {
       if (user.workouts.pushups >= milestone &&
           !user.achievements.includes(`${milestone} Pushups Completed`)) {
@@ -150,7 +148,6 @@ app.post("/completeWorkout", async (req, res) => {
       }
     });
 
-    // Check for achievements based on squat milestones
     squatMilestones.forEach(milestone => {
       if (user.workouts.squats >= milestone &&
           !user.achievements.includes(`${milestone} Squats Completed`)) {
