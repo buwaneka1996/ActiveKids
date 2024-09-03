@@ -10,12 +10,12 @@ const PushupExercise = ({ onClose }) => {
     const canvasRef = useRef(null);
     const [count, setCount] = useState(0);
     const [isCameraActive, setIsCameraActive] = useState(true);
-    const [poseState, setPoseState] = useState('up');
     const [progress, setProgress] = useState(0);
-    const [stabilityCounter, setStabilityCounter] = useState(0);
-
-    const stablePoseThreshold = 3; 
-    const angleThreshold = { up: 150, down: 70 }; 
+    const wasFullRef = useRef(false);
+    //const [poseState, setPoseState] = useState('');
+    //const [stabilityCounter, setStabilityCounter] = useState(0);
+    //const stablePoseThreshold = 0; 
+   // const angleThreshold = { up: 150, down: 70 }; 
 
 
     const calculateAngle = (a, b, c) => {
@@ -25,7 +25,12 @@ const PushupExercise = ({ onClose }) => {
         return Math.acos((ab * ab + bc * bc - ac * ac) / (2 * ab * bc)) * (180 / Math.PI);
     };
 
-    const detectPushup = useCallback((pose) => {
+    const speakCount = (count) => {
+        const msg = new SpeechSynthesisUtterance(`${count}`);
+        window.speechSynthesis.speak(msg);
+    };
+    
+    /*const detectPushup = useCallback((pose) => {
         const leftShoulder = pose.keypoints.find(point => point.name === 'left_shoulder');
         const rightShoulder = pose.keypoints.find(point => point.name === 'right_shoulder');
         const leftElbow = pose.keypoints.find(point => point.name === 'left_elbow');
@@ -41,25 +46,25 @@ const PushupExercise = ({ onClose }) => {
             setProgress(avgArmAngle); 
     
             console.log(`Average Arm Angle: ${avgArmAngle}`);
-            console.log(`Current Pose State: ${poseState}`);
             console.log(`Stability Counter: ${stabilityCounter}`);
+            console.log(`Current Pose State: ${poseState}`);
     
-            // down position
-            if (avgArmAngle < angleThreshold.down || poseState === 'down') {
+            // Down position detection
+            if (avgArmAngle < angleThreshold.down && poseState !== 'up') {
                 console.log('Potential Down Position Detected');
                 if (stabilityCounter >= stablePoseThreshold) {
                     setPoseState('down');
                     setStabilityCounter(0); 
                     console.log('Transitioned to Down Position'); 
                 } else {
-                    setStabilityCounter(stabilityCounter + 1);
+                    setStabilityCounter(prevCounter => prevCounter + 1);
                 }
-            } else if (avgArmAngle >= angleThreshold.down && poseState === 'up') {
+            } else if (avgArmAngle >= angleThreshold.down && poseState !== 'up') {
                 setStabilityCounter(0);
             }
-    
-            // up position 
-            if (avgArmAngle > angleThreshold.up && poseState === 'up') {
+            
+            // Up position detection
+            if (avgArmAngle > angleThreshold.up && poseState !== 'down') {
                 console.log('Potential Up Position Detected');
                 if (stabilityCounter >= stablePoseThreshold) {
                     setPoseState('up');
@@ -67,16 +72,17 @@ const PushupExercise = ({ onClose }) => {
                     setStabilityCounter(0); 
                     console.log('Pushup Count Increased');
                 } else {
-                    setStabilityCounter(stabilityCounter + 1);
+                    setStabilityCounter(prevCounter => prevCounter + 1);
                 }
-            } else if (avgArmAngle <= angleThreshold.up || poseState === 'down') {
+            } else if (avgArmAngle <= angleThreshold.up && poseState !== 'down') {
                 setStabilityCounter(0);
             }
         }
     }, [poseState, stabilityCounter, angleThreshold.down, angleThreshold.up, stablePoseThreshold]);
+    */
     
 
-    const drawArmAngles = useCallback((keypoints, ctx) => {
+    /*const drawArmAngles = useCallback((keypoints, ctx) => {
         const leftElbow = keypoints.find(point => point.name === 'left_elbow');
         const rightElbow = keypoints.find(point => point.name === 'right_elbow');
     
@@ -115,8 +121,41 @@ const PushupExercise = ({ onClose }) => {
         } else {
             console.warn('Elbow keypoints not detected');
         }
-    }, []);
+    }, []);*/
     
+    const detectPushup = useCallback((pose) => {
+        const leftShoulder = pose.keypoints.find(point => point.name === 'left_shoulder');
+        const rightShoulder = pose.keypoints.find(point => point.name === 'right_shoulder');
+        const leftElbow = pose.keypoints.find(point => point.name === 'left_elbow');
+        const rightElbow = pose.keypoints.find(point => point.name === 'right_elbow');
+        const leftWrist = pose.keypoints.find(point => point.name === 'left_wrist');
+        const rightWrist = pose.keypoints.find(point => point.name === 'right_wrist');
+    
+        if (leftShoulder && rightShoulder && leftElbow && rightElbow && leftWrist && rightWrist) {
+            const leftArmAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+            const rightArmAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+    
+            const avgArmAngle = (leftArmAngle + rightArmAngle) / 2;
+            setProgress(avgArmAngle); 
+
+            // Calculate progressWidth based on avgArmAngle
+            const progressWidth = Math.min(100, Math.max(0, 100 - (avgArmAngle - 70) * 1.5));
+
+            // Check for full and empty progress bar
+            if (progressWidth === 100) {
+                wasFullRef.current = true;
+            } else if (progressWidth === 0 && wasFullRef.current) {
+                setCount(prevCount => {
+                    const count = prevCount + 1;
+                    if (wasFullRef.current) { // Ensure speakCount is called only once
+                        speakCount(count);
+                        wasFullRef.current = false; // Reset flag
+                    }
+                    return count;
+            });
+        }
+        }
+    }, []);
 
     useEffect(() => {
         const loadPosenet = async () => {
@@ -142,7 +181,7 @@ const PushupExercise = ({ onClose }) => {
                     drawKeypoints(pose[0].keypoints, ctx);
                     drawSkeleton(pose[0].keypoints, ctx);
 
-                    drawArmAngles(pose[0].keypoints, ctx);
+                    //drawArmAngles(pose[0].keypoints, ctx);
                 }
             };
 
@@ -154,7 +193,7 @@ const PushupExercise = ({ onClose }) => {
             loadPosenet();
         }
 
-    }, [isCameraActive, detectPushup, drawArmAngles]);
+    }, [isCameraActive, detectPushup, /*drawArmAngles*/]);
 
     const handleStopCamera = () => {
         setIsCameraActive(false);

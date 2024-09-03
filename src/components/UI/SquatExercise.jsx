@@ -10,12 +10,15 @@ const SquatExercise = ({ onClose }) => {
     const canvasRef = useRef(null);
     const [count, setCount] = useState(0);
     const [isCameraActive, setIsCameraActive] = useState(true);
-    const [poseState, setPoseState] = useState('up');
-    const [stableFrames, setStableFrames] = useState(0);
+    const wasFullRef = useRef(false);
     const [progress, setProgress] = useState(0);
+   
+    //const [poseState, setPoseState] = useState('up');
+    //const [stableFrames, setStableFrames] = useState(0);
+    
 
 
-    const detectSquat = useCallback(
+   /* const detectSquat = useCallback(
         (pose) => {
             const leftHip = pose.keypoints.find(point => point.name === 'left_hip');
             const rightHip = pose.keypoints.find(point => point.name === 'right_hip');
@@ -60,7 +63,46 @@ const SquatExercise = ({ onClose }) => {
             }
         },
         [poseState, stableFrames]
-    );
+    );*/
+
+    const speakCount = (count) => {
+        const msg = new SpeechSynthesisUtterance(`${count}`);
+        window.speechSynthesis.speak(msg);
+    };
+    
+    const detectSquat = useCallback((pose) => {
+        const leftHip = pose.keypoints.find(point => point.name === 'left_hip');
+        const rightHip = pose.keypoints.find(point => point.name === 'right_hip');
+        const leftKnee = pose.keypoints.find(point => point.name === 'left_knee');
+        const rightKnee = pose.keypoints.find(point => point.name === 'right_knee');
+        const leftAnkle = pose.keypoints.find(point => point.name === 'left_ankle');
+        const rightAnkle = pose.keypoints.find(point => point.name === 'right_ankle');
+    
+        if (leftHip && rightHip && leftKnee && rightKnee && leftAnkle && rightAnkle) {
+            const leftLegAngle = calculateLegAngle(leftHip, leftKnee, leftAnkle);
+            const rightLegAngle = calculateLegAngle(rightHip, rightKnee, rightAnkle);
+    
+            const avgLegAngle = (leftLegAngle + rightLegAngle) / 2;
+            setProgress(avgLegAngle); 
+
+            // Calculate progressWidth based on avgLegAngle
+            const progressWidth = Math.min(100, Math.max(0, 100 - (avgLegAngle - 70) * 1.5));
+
+            // Check for full and empty progress bar
+            if (progressWidth === 100) {
+                wasFullRef.current = true;
+            } else if (progressWidth === 0 && wasFullRef.current) {
+                setCount(prevCount => {
+                    const count = prevCount + 1;
+                    if (wasFullRef.current) { 
+                        speakCount(count);
+                        wasFullRef.current = false; 
+                    }
+                    return count;
+            });
+        }
+        }
+    }, []);
 
     useEffect(() => {
         const loadPoseNet = async () => {
