@@ -85,10 +85,10 @@ const SquatExercise = ({ onClose }) => {
             const avgLegAngle = (leftLegAngle + rightLegAngle) / 2;
             setProgress(avgLegAngle); 
 
-            // Calculate progressWidth based on avgLegAngle
+            
             const progressWidth = Math.min(100, Math.max(0, 100 - (avgLegAngle - 70) * 1.5));
 
-            // Check for full and empty progress bar
+            
             if (progressWidth === 100) {
                 wasFullRef.current = true;
             } else if (progressWidth === 0 && wasFullRef.current) {

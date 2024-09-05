@@ -138,18 +138,18 @@ const PushupExercise = ({ onClose }) => {
             const avgArmAngle = (leftArmAngle + rightArmAngle) / 2;
             setProgress(avgArmAngle); 
 
-            // Calculate progressWidth based on avgArmAngle
+           
             const progressWidth = Math.min(100, Math.max(0, 100 - (avgArmAngle - 70) * 1.5));
 
-            // Check for full and empty progress bar
+            
             if (progressWidth === 100) {
                 wasFullRef.current = true;
             } else if (progressWidth === 0 && wasFullRef.current) {
                 setCount(prevCount => {
                     const count = prevCount + 1;
-                    if (wasFullRef.current) { // Ensure speakCount is called only once
+                    if (wasFullRef.current) { 
                         speakCount(count);
-                        wasFullRef.current = false; // Reset flag
+                        wasFullRef.current = false; 
                     }
                     return count;
             });
